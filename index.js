@@ -125,6 +125,16 @@ app.put("/api/persons/:id", (request,response) => {
     response.json(updatedPerson)
 })
 
+const path = require('path')
+
+// Serve the frontend from the dist folder
+app.use(express.static(path.join(__dirname, 'dist')))
+
+// Handle React routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'))
+})
+
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
