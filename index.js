@@ -107,11 +107,6 @@ app.put("/api/persons/:id", (request, response, next) => {
     .catch((error) => next(error));
 });
 
-// SPA fallback
-app.get("(.*)", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "dist", "index.html"));
-});
-
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
