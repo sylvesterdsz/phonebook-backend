@@ -133,8 +133,8 @@ const path = require("path");
 app.use(express.static(path.join(__dirname, "dist")));
 
 // Handle React routing
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
+app.use((req, res) => {
+  res.status(404).send({ error: "unknown endpoint" });
 });
 
 const PORT = process.env.PORT || 3001;
