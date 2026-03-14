@@ -2,12 +2,14 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
+const path = require("path");
 const Person = require("./models/person");
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(express.static("dist"));
 
 morgan.token("body", (req) => {
   return JSON.stringify(req.body);
@@ -35,7 +37,7 @@ app.get("/info", (request, response) => {
     .catch((error) => next(error));
 });
 
-app.get("/api/persons/:id", (request, response) => {
+app.get("/api/persons/:id", (request, response, next) => {
   const id = request.params.id;
   Person.findById(id)
     .then((person) => {
@@ -48,7 +50,7 @@ app.get("/api/persons/:id", (request, response) => {
     .catch((error) => next(error));
 });
 
-app.delete("/api/persons/:id", (request, response) => {
+app.delete("/api/persons/:id", (request, response, next) => {
   const id = request.params.id;
   //persons = persons.filter((p) => p.id !== id);
   Person.findByIdAndDelete(id)
@@ -79,7 +81,7 @@ app.post("/api/persons", (request, response) => {
   });
 });
 
-app.put("/api/persons/:id", (request, response) => {
+app.put("/api/persons/:id", (request, response, next) => {
   const id = request.params.id;
   const { name, number } = request.body;
 
@@ -103,6 +105,11 @@ app.put("/api/persons/:id", (request, response) => {
       });
     })
     .catch((error) => next(error));
+});
+
+// SPA fallback
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "dist", "index.html"));
 });
 
 const unknownEndpoint = (request, response) => {
