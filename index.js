@@ -1,10 +1,13 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
+const path = require("path");
 require("dotenv").config();
 const Person = require("./models/person");
 
 const app = express();
+
+app.use(express.static("dist"));
 
 app.use(express.json());
 app.use(cors());
